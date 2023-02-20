@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterhw4/constants/relationship.dart';
 import 'package:flutterhw4/helpers/task_sub_list.dart';
+import 'package:flutterhw4/main.dart';
 import 'package:flutterhw4/model/relationship_list_item.dart';
 import 'package:flutterhw4/model/task_details_model.dart';
 import 'package:flutterhw4/services/persistence_service.dart';
@@ -52,6 +53,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                           setState(() {
                             widget.taskModel.task.status = value!;
                             widget.taskModel.task.lastUpdated = DateTime.now();
+                            dbHelper.updateTask(widget.taskModel.task);
                           });
                         },
                         items: status.list.map<DropdownMenuItem<String>>((String value) {
@@ -81,6 +83,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                                   setState(() {
                                     widget.taskModel.task.relationships
                                         .removeAt(widget.taskModel.task.relationships.indexWhere((element) => element.taskId == item.task.taskId));
+                                    dbHelper.updateTask( widget.taskModel.task);
                                     relationshipItemList.removeAt(index);
                                   });
                                   ScaffoldMessenger.of(context)
@@ -113,6 +116,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                                                     .relationshipType = value!;
                                                 item.relationship.relationshipType = value!;
                                                 widget.taskModel.task.lastUpdated = DateTime.now();
+                                                dbHelper.updateTask(widget.taskModel.task);
                                               });
                                             },
                                             items: RelationshipType.list().map<DropdownMenuItem<String>>((String value) {

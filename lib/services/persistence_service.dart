@@ -37,10 +37,10 @@ class PersistenceService {
     );
   }
 
-  Future<void> addTask(Map<String, dynamic> row) async {
+  Future<void> addTask(Task row) async {
     await _db.insert(
         _table,
-        row
+        row.toJson()
     );
   }
 
@@ -50,15 +50,14 @@ class PersistenceService {
     return response.map((e) => Task.fromJson(e)).toList();
   }
 
-  // static Future<void> updateTask(Task task) async {
-  //   final db = await PersistenceService.getDatabaseInstance();
-  //   await db.update(
-  //       'task',
-  //       task.toJson(),
-  //       where: "taskId = ?",
-  //       whereArgs: [task.taskId])
-  //   ;
-  // }
+   Future<void> updateTask(Task task) async {
+    await _db.update(
+        _table,
+        task.toJson(),
+        where: "taskId = ?",
+        whereArgs: [task.taskId])
+    ;
+  }
 
   // static Future<Task?> getTask(String taskId) async {
   //   final db = await PersistenceService.getDatabaseInstance();

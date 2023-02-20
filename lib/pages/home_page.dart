@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _addTaskToDB(Task task) async {
-    await dbHelper.addTask(task.toJson());
+    await dbHelper.addTask(task);
   }
 
   /// Label for fields on home screen.
