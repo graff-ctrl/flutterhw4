@@ -25,18 +25,8 @@ class Task {
       List<TaskRelationship>? relationships
       ) : relationships = relationships ?? <TaskRelationship>[];
 
+  // These deviate from the required json mapping due to sqflite unable to
+  // store lists. See
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
-
   Map<String, dynamic> toJson() => _$TaskToJson(this);
-
-  static Task fromSQLite(Map<String, dynamic> json) {
-    return _$TaskFromJson(json);
-  }
-
-  Map<String, dynamic> toSQLite() {
-    var response = _$TaskToJson(this);
-    response['relationships'] = jsonEncode(response['relationships']);
-    return response;
-  }
-
 }
