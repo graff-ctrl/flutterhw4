@@ -27,12 +27,21 @@ class _HomePageState extends State<HomePage> {
   initState() {
     // at the beginning, all users are shown
     super.initState();
-    _refresh();
+    // Load data from db at start.
+    _loadFromDB();
     filterItems = widget.items;
     _filterList('');
   }
 
   void _refresh() async {
+    setState(() {
+      filterItems = widget.items;
+      _sort();
+    });
+  }
+
+  /// Load from SQLite database.
+  void _loadFromDB() async {
     final data = await dbHelper.getAllTasks();
     setState(() {
       widget.items = data;
