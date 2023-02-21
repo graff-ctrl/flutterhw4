@@ -31,13 +31,11 @@ class _TaskDetailsState extends State<TaskDetails> {
         MaterialPageRoute(
             builder: (builder) => TakePictureScreen(camera: cameraHelper.firstCamera))
     );
-    print(result);
     setState(() {
       widget.taskModel.task.imageUrl = result;
+      dbHelper.updateTask(widget.taskModel.task);
       visible = true;
       GallerySaver.saveImage(result);
-      // thumbnailUrl = result;
-      dbHelper.updateTask(widget.taskModel.task);
     });
   }
 

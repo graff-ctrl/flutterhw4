@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterhw4/main.dart';
 import 'package:flutterhw4/model/task_details_model.dart';
@@ -74,6 +75,28 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        /// ONLY SHOW DEBUG DRAWER WHEN NOT RELEASE
+        drawer: kReleaseMode == false ? Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text('Debug Drawer'),
+              ),
+              ListTile(
+                title: const Text('Clear Cache'),
+                onTap: () {
+                  dbHelper.deleteAllTasks();
+                  _refresh();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ) : null,
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text(widget.title),

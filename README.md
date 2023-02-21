@@ -1,16 +1,18 @@
-# flutterhw4
+# hw_four
 
-A new Flutter project.
+First flutter homework application featuring a Task app.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Install the Flutter Command line app: https://docs.flutter.dev/get-started/install
+Run `flutter doctor`
+Open project in Android Studio or VS code
+Once gradle has finished, run build.
+ - click Play
+ - Via command line you may run, `flutter run`
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Debug Drawer
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This assignment adds a data persistence layer for storing Tasks in a SQLite DB. The debug drawer on the 
+Home Page will allow you to clear the cache of those task. Image caches are not cleared with this action. 

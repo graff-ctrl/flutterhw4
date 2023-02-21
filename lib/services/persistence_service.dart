@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/task.dart';
 
+/// Data persistence service for raising state throughtout app startup.
 class PersistenceService {
 
   static const _dbName = 'TasksApp.db';
@@ -12,7 +13,6 @@ class PersistenceService {
   static const _table = 'tasks';
 
   late Database _db;
-
 
   Future<void> init() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
@@ -45,7 +45,6 @@ class PersistenceService {
 
   Future<List<Task>> getAllTasks() async {
     var response = await _db.query(_table);
-    print(response);
     return response.map((e) => Task.fromJson(e)).toList();
   }
 
@@ -56,5 +55,9 @@ class PersistenceService {
         where: "taskId = ?",
         whereArgs: [task.taskId])
     ;
+  }
+
+  Future<void> deleteAllTasks() async {
+    await _db.delete(_table);
   }
 }
