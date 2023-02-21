@@ -49,6 +49,10 @@ dependencies:
   json_annotation: ^4.8.0
   build_runner: ^2.3.0
   json_serializable: ^6.6.1
+  permission_handler: ^10.2.0
+  flutter_speed_dial: ^6.2.0
+  thumbnailer: ^2.2.0
+  gallery_saver: ^2.3.2
 
 dev_dependencies:
   flutter_test:

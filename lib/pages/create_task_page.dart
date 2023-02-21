@@ -73,12 +73,13 @@ class _CreateTaskState extends State<CreateTask> {
       onTap: () {
         /// Tasks are set to open by default.
         Task result = Task(
-          _titleController.text,
-          _descriptionController.text,
-          DateTime.now(),
-          s.open,
-          TaskId.generateTaskId(_titleController.text + DateTime.now().toString()),
-          null
+          title: _titleController.text,
+          description: _descriptionController.text,
+          lastUpdated: DateTime.now(),
+          status: s.open,
+          taskId: TaskId.generateTaskId(_titleController.text + DateTime.now().toString()),
+          imageUrl: 'image',
+          relationships: null
         );
         Navigator.pop(context, result);
       },

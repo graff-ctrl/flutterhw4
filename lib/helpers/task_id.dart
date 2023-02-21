@@ -17,12 +17,13 @@ class TaskId {
     const String description = "Test Description";
 
     return Task(
-        title,
-        description,
-        DateTime.now(),
-        status.open,
-        TaskId.generateTaskId(title + DateTime.now().toString()),
-        null
+        title: title,
+        description: description,
+        lastUpdated: DateTime.now(),
+        status: status.open,
+        taskId: TaskId.generateTaskId(title + DateTime.now().toString()),
+        imageUrl: "holder",
+        relationships: null
         );
   }
 }

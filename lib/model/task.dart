@@ -15,15 +15,17 @@ class Task {
   String status;
   String taskId;
   List<TaskRelationship> relationships;
+  String imageUrl;
 
-  Task(
-      this.title,
-      this.description,
-      this.lastUpdated,
-      this.status,
-      this.taskId,
-      List<TaskRelationship>? relationships
-      ) : relationships = relationships ?? <TaskRelationship>[];
+  Task({
+    required this.title,
+    this.description,
+    required this.lastUpdated,
+    required this.status,
+    required this.taskId,
+    required this.imageUrl,
+    required List<TaskRelationship>? relationships
+  }) : relationships = relationships ?? <TaskRelationship>[];
 
   // These deviate from the required json mapping due to sqflite unable to
   // store lists. See

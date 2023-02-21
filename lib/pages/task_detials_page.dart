@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:thumbnailer/thumbnailer.dart';
 import 'package:flutterhw4/constants/relationship.dart';
 import 'package:flutterhw4/helpers/task_sub_list.dart';
 import 'package:flutterhw4/main.dart';
 import 'package:flutterhw4/model/relationship_list_item.dart';
 import 'package:flutterhw4/model/task_details_model.dart';
-import 'package:flutterhw4/services/persistence_service.dart';
+import 'package:flutterhw4/widgets/take_picture.dart';
 import 'package:flutterhw4/widgets/widget_label.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import '../constants/status.dart' as status;
 
 class TaskDetails extends StatefulWidget {
@@ -20,14 +24,43 @@ class TaskDetails extends StatefulWidget {
 
 class _TaskDetailsState extends State<TaskDetails> {
   late List<RelationshipListItem> relationshipItemList = TaskSubList.filter(widget.taskModel.task.relationships, widget.taskModel.allTasks);
+  late bool visible = widget.taskModel.task.imageUrl == "image" ? false : true;
+  Future<void> _newPhoto(BuildContext context) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (builder) => TakePictureScreen(camera: cameraHelper.firstCamera))
+    );
+    print(result);
+    setState(() {
+      widget.taskModel.task.imageUrl = result;
+      visible = true;
+      GallerySaver.saveImage(result);
+      // thumbnailUrl = result;
+      dbHelper.updateTask(widget.taskModel.task);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: const Text("Task Details")
+            title: const Text("Task Details"),
+            leading: BackButton (
+              color: Colors.white,
+              onPressed: () => Beamer.of(context).beamBack(),
+            ),
         ),
         body: Column(
             children: <Widget>[
+              Visibility(
+                visible: visible,
+                child: Image.file(
+                  File(widget.taskModel.task.imageUrl),
+                  width: 100,
+                  height: 100,
+                ),
+              ),
               Card(
                 elevation: 10,
                 child: Column(
@@ -146,6 +179,10 @@ class _TaskDetailsState extends State<TaskDetails> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.camera),
+              label: 'Add Photo',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.task),
               label: 'Add Sub-task',
             ),
@@ -157,6 +194,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                 context.beamToNamed('/');
                 break;
               case 1:
+                _newPhoto(context);
+                break;
+              case 2:
                 context.beamToNamed('/addRelationship', data: widget.taskModel);
                 break;
             }

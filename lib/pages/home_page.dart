@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutterhw4/main.dart';
 import 'package:flutterhw4/model/task_details_model.dart';
@@ -35,8 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   void _refresh() async {
     setState(() {
-      filterItems = widget.items;
-      _sort();
+      _loadFromDB();
     });
   }
 

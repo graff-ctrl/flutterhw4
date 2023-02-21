@@ -1,16 +1,22 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutterhw4/services/camera_service.dart';
 import 'package:flutterhw4/services/persistence_service.dart';
+import 'package:flutterhw4/widgets/take_picture.dart';
 import '../model/task_details_model.dart';
 import '../pages/add_relationship_page.dart';
 import '../pages/create_task_page.dart';
 import '../pages/home_page.dart';
 import '../pages/task_detials_page.dart';
 final dbHelper = PersistenceService();
+final cameraHelper = CameraService();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dbHelper.init();
-  runApp(const MyApp());
+  await cameraHelper.init();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -32,9 +38,11 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/': (context, state, data) => HomePage(title: 'Andrew Graff'),
           '/create': (context, state, data) => const CreateTask(),
+          '/takePicture': (context, state, data) => TakePictureScreen(camera: cameraHelper.firstCamera),
           '/addRelationship': (context, state, data) {
             final info = (data as TaskDetailsModel);
             return BeamPage(
+                key: ValueKey('add-${info.task.taskId}'),
                 child: AddRelationshipPage(taskModel: info),
                 type: BeamPageType.slideRightTransition
             );

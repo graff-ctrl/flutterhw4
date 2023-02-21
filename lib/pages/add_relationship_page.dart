@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterhw4/main.dart';
@@ -16,7 +17,11 @@ class AddRelationshipPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-        title: const Text("Add Sub-task")
+          title: const Text("Add Sub-task"),
+          leading: BackButton (
+            color: Colors.white,
+            onPressed: () => Beamer.of(context).beamBack(),
+          ),
     ),
     body: Column(
       children: [
