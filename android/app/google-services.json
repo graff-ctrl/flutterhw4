@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "518822984643",
+    "project_id": "myshittytaskapp",
+    "storage_bucket": "myshittytaskapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518822984643:android:481317bfdd370db4769b76",
+        "android_client_info": {
+          "package_name": "com.example.flutterhw4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518822984643-8qq4bv2tnnk8olaulp2jm92n74ldf2qi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxfYoj55zfh5FJqQ1yu7JcsKToKuT1y2o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518822984643-8qq4bv2tnnk8olaulp2jm92n74ldf2qi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
