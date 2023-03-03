@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutterhw4/main.dart';
+import 'package:flutterhw4/services/provider/provider.dart';
+import 'package:provider/provider.dart';
 import '../helpers/task_id.dart';
 import '../constants//status.dart' as s;
 import '../model/task.dart';
@@ -11,10 +14,19 @@ class CreateTask extends StatefulWidget {
 
 class _CreateTaskState extends State<CreateTask> {
   /// Creates task for task list.
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  String status = "";
-  final DateTime lastUpdated = DateTime.now();
+  late final TextEditingController _titleController;
+  late final TextEditingController _descriptionController;
+  late String _status = "";
+  late final DateTime _lastUpdated;
+
+  @override
+  void initState() {
+    _titleController = TextEditingController();
+    _descriptionController = TextEditingController();
+    _status = "";
+    _lastUpdated = DateTime.now();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -55,8 +67,9 @@ class _CreateTaskState extends State<CreateTask> {
                         title(),
                         label("Description"),
                         description(),
-                        date(lastUpdated),
-                        createButton()
+                        date(_lastUpdated),
+                        saveToLocalCache(),
+                        saveToFirebase()
                       ],
                     ),
                   )
@@ -67,39 +80,82 @@ class _CreateTaskState extends State<CreateTask> {
         ));
   }
 
-  /// Create task button widget
-  Widget createButton() {
-    return InkWell(
-      onTap: () {
-        /// Tasks are set to open by default.
-        Task result = Task(
-          title: _titleController.text,
-          description: _descriptionController.text,
-          lastUpdated: DateTime.now(),
-          status: s.open,
-          taskId: TaskId.generateTaskId(_titleController.text + DateTime.now().toString()),
-          imageUrl: 'image',
-          relationships: null
-        );
-        Navigator.pop(context, result);
-      },
-      child: Container(
-          height: 55,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.green,
-          ),
-          child: const Center(
-            child: Text(
-              'Save',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15
-              ),
+  Widget saveToLocalCache() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          /// Tasks are set to open by default.
+          var result = Task(
+            title: _titleController.text,
+            description: _descriptionController.text,
+            lastUpdated: DateTime.now(),
+            status: s.open,
+            taskId: TaskId.generateTaskId(_titleController.text + DateTime.now().toString()),
+            imageUrl: 'image',
+            relationships: null
+          );
+          Provider.of<TaskListModel>(context, listen: false).addTaskToCache(result);
+          Navigator.pop(context, true);
+        },
+        child: Container(
+            height: 55,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.green,
             ),
-          )
+            child: const Center(
+              child: Text(
+                'Save to local storage',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15
+                ),
+              ),
+            )
+        ),
+      ),
+    );
+  }
+
+  Widget saveToFirebase() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () async {
+          /// Tasks are set to open by default.
+          var result = Task(
+              title: _titleController.text,
+              description: _descriptionController.text,
+              lastUpdated: DateTime.now(),
+              status: s.open,
+              taskId: TaskId.generateTaskId(_titleController.text + DateTime.now().toString()),
+              imageUrl: 'image',
+              relationships: null
+          );
+          Provider.of<TaskListModel>(context, listen: false).postTask(result);
+          Navigator.pop(context, true);
+        },
+        child: Container(
+            height: 55,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.green,
+            ),
+            child: const Center(
+              child: Text(
+                'Save to Firebase',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15
+                ),
+              ),
+            )
+        ),
       ),
     );
   }

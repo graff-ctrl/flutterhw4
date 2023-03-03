@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:518822984643:android:481317bfdd370db4769b76',
     messagingSenderId: '518822984643',
     projectId: 'myshittytaskapp',
+    databaseURL: 'https://myshittytaskapp-default-rtdb.firebaseio.com',
     storageBucket: 'myshittytaskapp.appspot.com',
   );
 
@@ -62,6 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:518822984643:ios:83c829504017a2f0769b76',
     messagingSenderId: '518822984643',
     projectId: 'myshittytaskapp',
+    databaseURL: 'https://myshittytaskapp-default-rtdb.firebaseio.com',
     storageBucket: 'myshittytaskapp.appspot.com',
     iosClientId: '518822984643-mse4uf9f2c08dd2a55ksl8v1slhgl12d.apps.googleusercontent.com',
     iosBundleId: 'com.example.flutterhw4',

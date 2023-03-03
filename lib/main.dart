@@ -1,22 +1,44 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterhw4/services/camera_service.dart';
-import 'package:flutterhw4/services/persistence_service.dart';
+import 'package:flutterhw4/services/provider/provider.dart';
+import 'package:provider/provider.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutterhw4/services/platform/camera_service.dart';
+import 'package:flutterhw4/services/firebase/firebase_auth_service.dart';
+import 'package:flutterhw4/services/firebase/firebase_db_service.dart';
+import 'package:flutterhw4/services/platform/persistence_service.dart';
 import 'package:flutterhw4/widgets/take_picture.dart';
 import '../model/task_details_model.dart';
 import '../pages/add_relationship_page.dart';
 import '../pages/create_task_page.dart';
 import '../pages/home_page.dart';
 import '../pages/task_detials_page.dart';
-final dbHelper = PersistenceService();
-final cameraHelper = CameraService();
+
+final PersistenceService localCacheService = PersistenceService();
+final CameraService cameraHelper = CameraService();
+final FirebaseAuthService authService = FirebaseAuthService();
+late final RealtimeDatabaseService firebaseDBService;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dbHelper.init();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+  await authService.getUser();
+  firebaseDBService = RealtimeDatabaseService(uuid: authService.currentUser?.uid);
+  await localCacheService.init();
   await cameraHelper.init();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(const MyApp()));
+      .then((value) => runApp(
+    MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => TaskListModel())
+        ],
+        child: const MyApp(),
+    ),
+  ));
 }
 
 class MyApp extends StatefulWidget {

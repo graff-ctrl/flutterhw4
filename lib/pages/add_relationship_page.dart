@@ -50,7 +50,7 @@ class AddRelationshipPage extends StatelessWidget {
                                         child: const Text(RelationshipType.clones),
                                         onPressed: () {
                                           addRelationship(taskModel.task.relationships, task.taskId, RelationshipType.clones);
-                                          dbHelper.updateTask(taskModel.task);
+                                          localCacheService.updateTask(taskModel.task);
                                           Navigator.pop(context);
                                         },
                                       ),
@@ -58,7 +58,7 @@ class AddRelationshipPage extends StatelessWidget {
                                         child: const Text(RelationshipType.blocks),
                                         onPressed: () {
                                           addRelationship(taskModel.task.relationships, task.taskId, RelationshipType.blocks);
-                                          dbHelper.updateTask(taskModel.task);
+                                          localCacheService.updateTask(taskModel.task);
                                           Navigator.pop(context);
                                         },
                                       ),
@@ -66,7 +66,7 @@ class AddRelationshipPage extends StatelessWidget {
                                         child: const Text(RelationshipType.child),
                                         onPressed: () {
                                           addRelationship(taskModel.task.relationships, task.taskId, RelationshipType.child);
-                                          dbHelper.updateTask(taskModel.task);
+                                          localCacheService.updateTask(taskModel.task);
                                           Navigator.pop(context);
                                         },
                                       ),
@@ -74,7 +74,7 @@ class AddRelationshipPage extends StatelessWidget {
                                         child: const Text(RelationshipType.parent),
                                         onPressed: () {
                                           addRelationship(taskModel.task.relationships, task.taskId, RelationshipType.parent);
-                                          dbHelper.updateTask(taskModel.task);
+                                          localCacheService.updateTask(taskModel.task);
                                           Navigator.pop(context);
                                         },
                                       ),
@@ -82,7 +82,7 @@ class AddRelationshipPage extends StatelessWidget {
                                         child: const Text(RelationshipType.depends),
                                         onPressed: () {
                                           addRelationship(taskModel.task.relationships, task.taskId, RelationshipType.depends);
-                                          dbHelper.updateTask(taskModel.task);
+                                          localCacheService.updateTask(taskModel.task);
                                           Navigator.pop(context);
                                         },
                                       ),

@@ -6,7 +6,7 @@ part of 'task.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Task _$TaskFromJson(Map<String, dynamic> json) => Task(
+Task _$TaskFromJson(Map<dynamic, dynamic> json) => Task(
       title: json['title'] as String,
       description: json['description'] as String?,
       lastUpdated: DateTime.parse(json['lastUpdated'] as String),

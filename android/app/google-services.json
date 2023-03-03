@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "518822984643",
+    "firebase_url": "https://myshittytaskapp-default-rtdb.firebaseio.com",
     "project_id": "myshittytaskapp",
     "storage_bucket": "myshittytaskapp.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "518822984643-8qq4bv2tnnk8olaulp2jm92n74ldf2qi.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "518822984643-mse4uf9f2c08dd2a55ksl8v1slhgl12d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterhw4"
+              }
             }
           ]
         }

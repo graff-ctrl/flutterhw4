@@ -29,6 +29,6 @@ class Task {
 
   // These deviate from the required json mapping due to sqflite unable to
   // store lists. See
-  factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
+  factory Task.fromJson(Map<dynamic, dynamic> json) => _$TaskFromJson(json);
   Map<String, dynamic> toJson() => _$TaskToJson(this);
 }

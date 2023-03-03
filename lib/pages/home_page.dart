@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterhw4/main.dart';
 import 'package:flutterhw4/model/task_details_model.dart';
+import 'package:flutterhw4/services/provider/provider.dart';
+import 'package:flutterhw4/services/task/task_service.dart';
+import 'package:provider/provider.dart';
 import '../model/task.dart';
 import '../pages/create_task_page.dart';
 import '../widgets/widget_label.dart';
@@ -20,56 +23,53 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Task>? filterItems = []; // Filtered list form items
+  List<Task> filterItems = []; // Filtered list form items
   Filters? _filter = Filters.all;
+  final TaskListModel taskListModel = TaskListModel();
   @override
   initState() {
     // at the beginning, all users are shown
     super.initState();
     // Load data from db at start.
     _loadFromDB();
-    filterItems = widget.items;
-    _filterList('');
+
   }
 
   void _refresh() async {
     setState(() {
-      _loadFromDB();
+      filterItems = taskListModel.tasks;
+      _sort();
     });
   }
 
   /// Load from SQLite database.
   void _loadFromDB() async {
-    final data = await dbHelper.getAllTasks();
+    await taskListModel.loadProvider();
     setState(() {
-      widget.items = data;
-      filterItems = widget.items;
+      filterItems = taskListModel.tasks;
       _sort();
     });
   }
 
   /// Sort widget.items list
   void _sort() {
-    widget.items.sort((a, b) => b.lastUpdated.compareTo(a.lastUpdated));
+    taskListModel.tasks.sort((a, b) => b.lastUpdated.compareTo(a.lastUpdated));
   }
 
-  /// Add item to list.
-  void _addItem(Task task) {
-    _addTaskToDB(task);
-    _refresh();
-  }
   void _filterList(String query) {
-    List<Task>? results = [];
+    List<Task> results = [];
     if (query.isEmpty) {
+      results = taskListModel.tasks;
       _sort();
-      results = widget.items;
     } else {
+      results = taskListModel.tasks.where((element) => (element.status == query)).toList();
       _sort();
-      results = widget.items.where((element) => (element.status == query)).toList();
     }
     setState(() {
+      print(results);
       filterItems = results;
     });
+
   }
 
   @override
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
               ListTile(
                 title: const Text('Clear Cache'),
                 onTap: () {
-                  dbHelper.deleteAllTasks();
+                  localCacheService.deleteAllTasks();
                   _refresh();
                   Navigator.pop(context);
                 },
@@ -100,9 +100,11 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text(widget.title),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.purpleAccent,
+          shadowColor: Colors.orangeAccent,
         ),
         body: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             const WidgetLabel(text: 'Task filters:'),
             radioButton('All', Filters.all),
@@ -110,27 +112,42 @@ class _HomePageState extends State<HomePage> {
             radioButton('In Progress', Filters.inProgress),
             radioButton('Complete', Filters.complete),
             const WidgetLabel(text: 'Tasks:'),
-            Expanded(
-              child: ListView.builder(
-                key: const Key('tasks'),
-                itemCount: filterItems?.length,
-                itemBuilder: (context, index) {
-                  final task = filterItems![index];
-                  return Card (
-                      child: ListTile(
-                        title: Text(filterItems![index].title),
-                        onTap: () => context.beamToNamed('/tasks/${task.taskId}', data: TaskDetailsModel(task, widget.items)),
-                        trailing: const Icon(Icons.keyboard_arrow_right),
-                      ),
-                  );
-                },
-              ),
+            Consumer<TaskListModel>(
+              builder: (context, list, child) {
+
+                return Expanded(
+                  child: ListView.builder(
+                    key: const Key('tasks'),
+                    itemCount: filterItems?.length,
+                    itemBuilder: (context, index) {
+                      final task = filterItems![index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card (
+                            child: ListTile(
+                              title: Text(filterItems![index].title),
+                              onTap: () => context.beamToNamed('/tasks/${task.taskId}', data: TaskDetailsModel(task, list.tasks)),
+                              trailing: const Icon(Icons.keyboard_arrow_right),
+                            ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
             ),
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _newTaskCreation(context);
+          onPressed: () async {
+            var result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                builder: (builder) => const CreateTask())
+            );
+            print(result);
+            if (mounted!) return;
+            _refresh();
           },
           tooltip: 'Create',
           child: const Icon(Icons.add),
@@ -138,26 +155,14 @@ class _HomePageState extends State<HomePage> {
       );
   }
 
-  /// Transitions to the Create Task Page passing context.
-  Future<void> _newTaskCreation(BuildContext context) async {
-    final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-        builder: (builder) => const CreateTask()),
-    );
-
-    if (!mounted) return;
-    _addItem(result);
-  }
-
   void _addTaskToDB(Task task) async {
-    await dbHelper.addTask(task);
+    await localCacheService.addTask(task);
   }
 
   /// Label for fields on home screen.
   Widget label(String text) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+        padding: const EdgeInsets.all(8.0),
         child: Text(
           text,
           style: const TextStyle(

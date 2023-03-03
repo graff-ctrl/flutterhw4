@@ -33,7 +33,7 @@ class _TaskDetailsState extends State<TaskDetails> {
     );
     setState(() {
       widget.taskModel.task.imageUrl = result;
-      dbHelper.updateTask(widget.taskModel.task);
+      localCacheService.updateTask(widget.taskModel.task);
       visible = true;
       GallerySaver.saveImage(result);
     });
@@ -84,7 +84,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                           setState(() {
                             widget.taskModel.task.status = value!;
                             widget.taskModel.task.lastUpdated = DateTime.now();
-                            dbHelper.updateTask(widget.taskModel.task);
+                            localCacheService.updateTask(widget.taskModel.task);
                           });
                         },
                         items: status.list.map<DropdownMenuItem<String>>((String value) {
@@ -114,7 +114,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                                   setState(() {
                                     widget.taskModel.task.relationships
                                         .removeAt(widget.taskModel.task.relationships.indexWhere((element) => element.taskId == item.task.taskId));
-                                    dbHelper.updateTask( widget.taskModel.task);
+                                    localCacheService.updateTask( widget.taskModel.task);
                                     relationshipItemList.removeAt(index);
                                   });
                                   ScaffoldMessenger.of(context)
@@ -147,7 +147,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                                                     .relationshipType = value!;
                                                 item.relationship.relationshipType = value!;
                                                 widget.taskModel.task.lastUpdated = DateTime.now();
-                                                dbHelper.updateTask(widget.taskModel.task);
+                                                localCacheService.updateTask(widget.taskModel.task);
                                               });
                                             },
                                             items: RelationshipType.list().map<DropdownMenuItem<String>>((String value) {
