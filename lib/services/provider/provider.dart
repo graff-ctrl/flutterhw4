@@ -6,7 +6,7 @@ import '../../../model/task.dart';
 class TaskListModel extends ChangeNotifier {
   TaskService taskService = TaskService();
   List<Task> _tasks = [];
-  // Returns course list
+  // Returns task list
   List<Task> get tasks => _tasks;
 
   Future<void> loadProvider() async {

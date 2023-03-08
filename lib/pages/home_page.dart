@@ -145,7 +145,6 @@ class _HomePageState extends State<HomePage> {
                 MaterialPageRoute(
                 builder: (builder) => const CreateTask())
             );
-            print(result);
             if (mounted!) return;
             _refresh();
           },
